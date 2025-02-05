@@ -11,7 +11,7 @@ class OrbitalSettings(bpy.types.PropertyGroup):
         min=1,
         max=10,
         update=lambda self, context: setattr(self, 'l', min(self.l, self.n - 1))
-    )
+    ) # type: ignore
     
     l: bpy.props.IntProperty(
         name="l",
@@ -20,7 +20,7 @@ class OrbitalSettings(bpy.types.PropertyGroup):
         min=0,
         max=10,
         update=lambda self, context: setattr(self, 'm', max(min(self.m, self.l), -self.l))
-    )
+    ) # type: ignore
     
     m: bpy.props.IntProperty(
         name="m",
@@ -28,7 +28,7 @@ class OrbitalSettings(bpy.types.PropertyGroup):
         default=0,
         min=-10,
         max=10
-    )
+    ) # type: ignore
     
     num_points: bpy.props.IntProperty(
         name="Particles",
@@ -36,7 +36,7 @@ class OrbitalSettings(bpy.types.PropertyGroup):
         default=10000,
         min=100,
         max=1000000
-    )
+    ) # type: ignore
 
 # Orbital generation function (same as before)
 def hydrogen_orbital(n, l, m, num_points):
@@ -128,13 +128,14 @@ class OrbitalPanel(bpy.types.Panel):
         box = layout.box()
         box.label(text="Quantum Numbers")
         box.prop(settings, 'n')
-        row = box.row()
-        row.prop(settings, 'l')
-        row.prop(settings, 'm')
+        box.prop(settings, 'l')
+        box.prop(settings, 'm')
         
         # Particle settings
         layout.separator()
-        layout.prop(settings, 'num_points')
+        box = layout.box()
+        box.label(text="Particle Settings")
+        box.prop(settings, 'num_points')
         
         # Generate button
         layout.separator()
